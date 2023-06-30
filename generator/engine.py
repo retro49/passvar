@@ -49,6 +49,9 @@ class Generator:
     __password_content = ""
     """ length of the password by default """
 
+    content = []
+    length = 16
+
     def __init__(self, length, content):
         self.length = int(length)
         self.content = content
@@ -58,6 +61,7 @@ class Generator:
                     ContentType.NUMERIC,
                     ContentType.SPECIAL
                     ]
+
         for c in self.content:
             if c in CharacterSet().__dict__():
                 self.__password_content += CharacterSet().__dict__()[c]

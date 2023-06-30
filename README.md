@@ -1,34 +1,34 @@
-PassVar
--
+# PassVar
+
 PassVar is a simple python library used for varifying and generating passwords
-based on some criterias.
+based on OWASP and IBM standard.
+PassVar has two basic engimes.
+1. Generator
+2. Varification
 
-Verification
--
-This tool can be used to classify  strength of a password as following
-- Weak
-- Normal
-- String
-- Very Strong
+### Passowrd Generation
+Generator engine is used to generate a pseudo random password
+according to most commonly used standards.
+According to OWASP and IBM standards a strong type
+password is composed of **ASCII alphabet characters**,
+**ASCII numeric** and **ASCII special characters** with some exception.
 
-Passwords are classified based on the following criterias.
-1. Length
-2. Content
+### Password Verification
+Password varification is a process for varifying whether a password is
+- **Weak**
+- **Normal**
+- **String**
+- **Very Strong**
 
-1. Length
----
-Based on lenth passwords can be classified as short and long.
-This helps to have a consistent password.
+#### Passwords are classified based on the following criterias.
+1. **Length**
+2. **Content**
 
-2. Content
----
+1. **Length**
+According to **OWASP** password length can be classified as weak or strong.
+The standard specifies that the minimum password length should be **8**.
+Password with length lessthan 8 is generally considered to be a weak password.
+
+2. **Content**
 This property of a password allows to have a password with a variety
-of characters rather than similar and repetitive characters in the password
-
-
-Generation
--
-PassVar can be used to generate passwords based on the properties
-mentioned above.
-By providing the length and strength property to the generator
-engine we can generate a pseudo random password.
+of characters rather than similar and repetitive characters in the password.

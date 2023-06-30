@@ -8,24 +8,37 @@ from generator.engine import Generator
 
 class Args:
     LONG_HELP = "--help"
-    SHORT_HELP = "-h"
     LONG_OPERATION = "operation"
-    SHORT_OPERATION = "o"
-    LONG_VERSION = "--version"
-    SHORT_VERSION = "-v"
     LONG_LENGTH = "--length"
-    SHORT_LENGTH = "-l"
     LONG_CONTENT = "--content"
-    SHORT_CONTENT = "-c"
+    LONG_VERSION = "--version"
     LONG_PASSWORD = "--password"
+    LONG_FILE = "--file"
+    LONG_JSON = "--json"
+    LONG_AMOUNT = "--amount"
+
+    SHORT_HELP = "-h"
+    SHORT_VERSION = "-v"
+    SHORT_LENGTH = "-l"
+    SHORT_CONTENT = "-c"
     SHORT_PASSWORD = "-p"
+    SHORT_FILE = "-f"
+    SHORT_JSON = "-j"
+    SHORT_AMOUNT = "-a"
 
     MESSAGE_HELP_OPERATION = "use to classify operation type \
 [generate | verify]"
     MESSAGE_HELP_CONTENT = "-c | --content [alpha, num, special]"
     MESSAGE_HELP_LENGTH = "-l | --lenght [value] to \
 specify the password length"
-
+    MESSAGE_HELP_JSON = "-j | --json to specify output as a json"
+    MESSAGE_HELP_FILE = "-f | --file [file name] to specify \
+output destination to a file"
+    MESSAGE_HELP_PASSWORD = "-p | --password to specify \
+password for varification"
+    MESSAGE_HELP_VERSION = "-v | --version show version"
+    MESSAGE_HELP_AMOUNT = "-a | --amount to specify how much password \
+to generate"
     MESSAGE_USAGE = f"""
 {Logo()}
 PassVar is a simple python program used for verifying
@@ -34,7 +47,6 @@ and generating passwords based on OWASP standards.
 use operation to classify whether to generate or validate
 a password
 
->>> operation generate
 1. Password Generation
 PassVar can generate a pseudo random password
 with the provided attributes such as the length
@@ -46,32 +58,50 @@ password should contain
 The following are allowed content
 [alpha, num, special]
 
->>> operation verify
 2. Password Verification
 The other main use case of passvar is to
 verify a password based on some criterias.
 Some of the criterias are the following
-
-#### dude here this will be gone
-A. Length
-Length determines whether the password
-is strong or weak according to OWASP protocol.
-
-B. Content
-Content determines whether the the password
-has a common used characters according to
-OWASP and IBM standard.
 """
 
 
-"""
-!, @, #, $, %, ^, &, or *.
-special characters allowed according to IBM standard
-"""
+class Handler:
+    @staticmethod
+    def file_handler(content, length, file, amount=1, is_json=False):
+        generator = Generator(length, content)
+        stream = ""
+        if is_json:
+            for i in range(amount):
+                stream += generator.json_result() + chr(0x0a)
+        else:
+            for i in range(amount):
+                stream += generator.generate() + chr(0x0a)
+        with open(file, "+w") as ouput:
+            ouput.write(stream)
+
+    @staticmethod
+    def stdout_handler(content, length, amount=1, is_json=False):
+        generator = Generator(length, content)
+        stream = ""
+        if is_json:
+            for i in range(amount):
+                stream += generator.json_result() + chr(0xa)
+        else:
+            for i in range(amount):
+                stream += generator.generate() + chr(0xa)
+
+        print(f"{stream}")
 
 
 def main():
     parser = argparse.ArgumentParser(prog="passvar", usage=Args.MESSAGE_USAGE)
+
+    parser.add_argument(Args.LONG_OPERATION,
+                        help=Args.MESSAGE_HELP_OPERATION,
+                        nargs=1,
+                        type=str,
+                        default=None
+                        )
 
     parser.add_argument(Args.LONG_VERSION, Args.SHORT_VERSION,
                         action='version',
@@ -88,18 +118,30 @@ def main():
     parser.add_argument(Args.LONG_LENGTH, Args.SHORT_LENGTH,
                         default=16,
                         required=False,
+                        help=Args.MESSAGE_HELP_LENGTH
+                        )
+
+    parser.add_argument(Args.LONG_FILE, Args.SHORT_FILE,
+                        default=None,
+                        required=False,
+                        help=Args.MESSAGE_HELP_FILE,
+                        )
+
+    parser.add_argument(Args.LONG_JSON, Args.SHORT_JSON,
+                        action="store_true",
+                        help=Args.MESSAGE_HELP_JSON,
                         )
 
     parser.add_argument(Args.LONG_PASSWORD, Args.SHORT_PASSWORD,
                         default=None,
                         required=False,
+                        help=Args.MESSAGE_HELP_PASSWORD,
                         )
 
-    parser.add_argument(Args.LONG_OPERATION,
-                        help=Args.MESSAGE_HELP_OPERATION,
-                        nargs=1,
-                        type=str,
-                        default=None
+    parser.add_argument(Args.LONG_AMOUNT, Args.SHORT_AMOUNT,
+                        required=False,
+                        default=1,
+                        help=Args.MESSAGE_HELP_AMOUNT,
                         )
 
     args = parser.parse_args(sys.argv[1:])
@@ -112,13 +154,28 @@ def main():
                 ctype = ContentType().__iter__()
                 if ctype is not None:
                     if val not in ContentType().__iter__():
-                        print("heeeeey here: ", val)
+                        raise ValueError("unknown value")
         else:
             content = ContentType().__iter__()
-        print(Generator(length, content).json_result())
-        Generator(length, content).to_file("./pass.txt")
+
+        print(Logo())
+        if args.file is not None:
+            Handler.file_handler(content,
+                                 length,
+                                 args.file,
+                                 int(args.amount),
+                                 args.json
+                                 )
+        else:
+            Handler.stdout_handler(content,
+                                   length,
+                                   int(args.amount),
+                                   args.json
+                                   )
+
     elif args.operation[0] == "verify":
         password = args.password
+        _ = password
     else:
         sys.stdout.write("%s\n" % (Args.MESSAGE_USAGE))
 
