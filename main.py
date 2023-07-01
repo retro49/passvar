@@ -2,8 +2,9 @@ import sys
 import argparse
 
 from logo import Logo
-from generator.engine import ContentType
-from generator.engine import Generator
+from engine.generator import Generator
+from engine.varification import Varification
+from engine.util import ContentType
 
 
 class Args:
@@ -65,7 +66,7 @@ Some of the criterias are the following
 """
 
 
-class Handler:
+class GenerateHandler:
     @staticmethod
     def file_handler(content, length, file, amount=1, is_json=False):
         generator = Generator(length, content)
@@ -160,22 +161,27 @@ def main():
 
         print(Logo())
         if args.file is not None:
-            Handler.file_handler(content,
-                                 length,
-                                 args.file,
-                                 int(args.amount),
-                                 args.json
-                                 )
+            GenerateHandler.file_handler(content,
+                                         length,
+                                         args.file,
+                                         int(args.amount),
+                                         args.json
+                                         )
         else:
-            Handler.stdout_handler(content,
-                                   length,
-                                   int(args.amount),
-                                   args.json
-                                   )
+            GenerateHandler.stdout_handler(content,
+                                           length,
+                                           int(args.amount),
+                                           args.json
+                                           )
 
     elif args.operation[0] == "verify":
         password = args.password
-        _ = password
+        if password != "" or password is not None:
+            var = Varification(password).varify()
+            pass_length = var['length']
+            pass_strength = var['strength']
+            print(f"length: {pass_length}")
+            print(f"strength: {pass_strength}")
     else:
         sys.stdout.write("%s\n" % (Args.MESSAGE_USAGE))
 
