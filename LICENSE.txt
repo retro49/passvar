@@ -1,4 +1,4 @@
-IT License
+MIT License
 
 Copyright (c) 2009-2022 Robby Russell and contributors (https://github.com/ohmyzsh/ohmyzsh/contributors)
 
