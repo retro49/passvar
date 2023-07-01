@@ -16,7 +16,6 @@ password is composed of **ASCII alphabet characters**,
 ### Password Verification
 Password varification is a process for varifying whether a password is
 - **Weak**
-- **Normal**
 - **String**
 - **Very Strong**
 

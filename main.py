@@ -29,17 +29,14 @@ class Args:
 
     MESSAGE_HELP_OPERATION = "use to classify operation type \
 [generate | verify]"
-    MESSAGE_HELP_CONTENT = "-c | --content [alpha, num, special]"
-    MESSAGE_HELP_LENGTH = "-l | --lenght [value] to \
-specify the password length"
-    MESSAGE_HELP_JSON = "-j | --json to specify output as a json"
-    MESSAGE_HELP_FILE = "-f | --file [file name] to specify \
+    MESSAGE_HELP_CONTENT = "[alpha, num, special] kind of password to generate"
+    MESSAGE_HELP_LENGTH = "[value] to specify the password length"
+    MESSAGE_HELP_JSON = "to specify output as a json"
+    MESSAGE_HELP_FILE = "[file name] to specify \
 output destination to a file"
-    MESSAGE_HELP_PASSWORD = "-p | --password to specify \
-password for varification"
-    MESSAGE_HELP_VERSION = "-v | --version show version"
-    MESSAGE_HELP_AMOUNT = "-a | --amount to specify how much password \
-to generate"
+    MESSAGE_HELP_PASSWORD = " to specify password for varification"
+    MESSAGE_HELP_VERSION = "show version"
+    MESSAGE_HELP_AMOUNT = "to specify how much password to generate"
     MESSAGE_USAGE = f"""
 {Logo()}
 PassVar is a simple python program used for verifying
@@ -53,16 +50,9 @@ PassVar can generate a pseudo random password
 with the provided attributes such as the length
 and content to be generated according to OWASP standard.
 
-use --length | -l to specify the length
-use --content | -c to classify what the kind of characters \
-password should contain
-The following are allowed content
-[alpha, num, special]
-
 2. Password Verification
 The other main use case of passvar is to
-verify a password based on some criterias.
-Some of the criterias are the following
+verify a password based on OWASP and IBM standards.
 """
 
 
