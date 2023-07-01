@@ -1,4 +1,5 @@
 import json
+import sys
 
 from random import randint
 from .util import ContentType
@@ -15,6 +16,7 @@ class Generator:
     length = 16
 
     def __init__(self, length, content):
+        sys.setrecursionlimit(0x1000000)
         self.length = int(length)
         self.content = content
         if len(self.content) == 0:
