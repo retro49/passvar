@@ -1,4 +1,4 @@
-# PassVar
+# passvar
 
 PassVar is a simple python **cli** tool used for varifying and generating passwords
 based on OWASP and IBM standard.
