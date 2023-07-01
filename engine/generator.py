@@ -2,6 +2,7 @@ import json
 import sys
 
 from random import randint
+from random import shuffle
 from .util import ContentType
 from .util import CharacterSet
 from .util import ContentClassifier
@@ -30,11 +31,13 @@ class Generator:
         for c in self.content:
             if c in charset:
                 self.__password_content += charset[c]
+        self.__password_content = list(self.__password_content)
 
     """ generates a passowrd according to the given property """
 
     def generate(self) -> str:
         result = ""
+        shuffle(self.__password_content)
         for i in range(self.length):
             random_pos = randint(0, len(self.__password_content) - 1)
             result += self.__password_content[random_pos]
